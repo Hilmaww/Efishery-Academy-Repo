@@ -1,0 +1,7 @@
+Git Commands:
+
+git init -> inisialisasi
+git add -> track files
+git comming -m "message" -> committing files
+git remote add origin [url_repo] -> connect to repo
+git push origin [branch_name]
