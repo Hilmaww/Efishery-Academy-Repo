@@ -6,7 +6,9 @@ git comming -m "message" -> committing files
 git remote add origin [url_repo] -> connect to repo
 git push origin [branch_name]
 
-Git management:
+git branch -D [branch]
+
+Git management (trunk base):
 - Branch utamanya namanya trunk
 - Buat branch apabila develop fitur baru
 - avoiding long-lived branches
