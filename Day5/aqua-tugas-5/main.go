@@ -48,11 +48,27 @@ func main() {
 	if !isBought {
 		fmt.Println("Petani tidak dapat membeli barang yang telah dipilih")
 		isBerhasil = "tidak berhasil"
+		fmt.Printf("Petani %s membeli barang dengan total belanjaan %d\n", isBerhasil, sum)
 	} else {
 		isBerhasil = "berhasil"
+		fmt.Printf("Petani %s membeli barang dengan total belanjaan %d\n", isBerhasil, sum)
+		fmt.Println("Total produk dengan modal Rp 100.000: ")
 	}
-	fmt.Printf("Petani %s membeli barang dengan total belanjaan %d", isBerhasil, sum)
 
+	fmt.Println("Total produk dengan modal Rp 100.000: ")
+	for i := 0; i < len(point_choices); i++ {
+		fmt.Printf("%s - %d\n", point_choices[i].barang, point_choices[i].harga)
+	}
+	fmt.Println("---------------------------------------------------------------------")
+	idHargaTerkecil, idHargaTerbesar := urutHargaBarang(point_choices)
+	fmt.Printf("Produk termurah: %s Rp%d\n", point_choices[idHargaTerkecil].barang, point_choices[idHargaTerkecil].harga)
+	fmt.Printf("Produk termahal: %s Rp%d\n", point_choices[idHargaTerbesar].barang, point_choices[idHargaTerbesar].harga)
+	fmt.Println("---------------------------------------------------------------------")
+	fmt.Println("Daftar produk dengan harga Rp 10.000: ")
+	item10k := harga10k(point_choices)
+	for i := 0; i < len(item10k); i++ {
+		fmt.Printf("%s - %d\n", point_choices[i].barang, point_choices[i].harga)
+	}
 }
 
 // func parser(s string) []int {
@@ -95,14 +111,33 @@ func farmerBuy(item []point, modal int) (bool, int) {
 func urutHargaBarang(p []point) (int, int) {
 	// inisialisasi items
 	items := p
+	for i := 0; i < len(items); i++ {
+		fmt.Print("i: ", i)
+		if i != 6 {
+			for j := i + 1; j < len(items); j++ {
+				fmt.Println("j: ", j)
+				if items[i].harga > items[j].harga {
+					items[i], items[j] = items[j], items[i]
+				}
 
-	for i := 0; i < len(p); i++ {
-		for j := i; j < len(p); j++ {
-			if items[i].harga > items[j].harga {
-				items[i], items[j] = items[j], items[i]
 			}
 		}
-	}
-	return items[0].ID, items[len(p)-1].ID
 
+	}
+	return items[0].ID, items[len(items)].ID
+
+}
+
+// desc: menampilkan barang dengan harga 10.000
+// input: struct point
+// output: slices of struct point dengan harga 10.000
+func harga10k(p []point) []point {
+	var item10k []point
+
+	for i := 0; i < len(p); i++ {
+		if p[i].harga == 10000 {
+			item10k = append(item10k, p[i])
+		}
+	}
+	return item10k
 }
