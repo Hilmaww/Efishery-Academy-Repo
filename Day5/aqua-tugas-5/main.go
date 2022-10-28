@@ -89,9 +89,20 @@ func farmerBuy(item []point, modal int) (bool, int) {
 	return canBuy, totalBeli
 }
 
-func urutHargaBarang(p []point) {
-	items := []int{}
+// desc: membuat fungsi untuk menentukan harga paling murah pada barang barang di point efishery, tanpa sort built-in function
+// input: struct point
+// output: ID (int) dengan harga terkecil dan harga terendah
+func urutHargaBarang(p []point) (int, int) {
+	// inisialisasi items
+	items := p
+
 	for i := 0; i < len(p); i++ {
-		items = append(items, p[i].harga)
+		for j := i; j < len(p); j++ {
+			if items[i].harga > items[j].harga {
+				items[i], items[j] = items[j], items[i]
+			}
+		}
 	}
+	return items[0].ID, items[len(p)-1].ID
+
 }
