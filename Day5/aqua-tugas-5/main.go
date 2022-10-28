@@ -11,42 +11,47 @@ type point struct {
 }
 
 func main() {
-	//bufferReader := bufio.NewReader(os.Stdin)
+
 	uangTotal := 100000
-	// var inputHargaBeli string
+	var point_choices []point
+	var a, b, c, d, e, f, g int
+	var isBerhasil string
 
-	// points := []point{
-	// 	{ID: 1, barang: "Benih Lele", harga: 50000},
-	// 	{ID: 2, barang: "Pakan lele", harga: 25000},
-	// 	{ID: 3, barang: "Probiotik A", harga: 75000},
-	// 	{ID: 4, barang: "Probiotik Nila B", harga: 10000},
-	// 	{ID: 5, barang: "Pakan Nila", harga: 20000},
-	// 	{ID: 6, barang: "Benih Nila", harga: 20000},
-	// 	{ID: 7, barang: "Cupang", harga: 5000},
-	// 	{ID: 8, barang: "Benih Nila", harga: 30000},
-	// 	{ID: 9, barang: "Benih Cupang", harga: 10000},
-	// 	{ID: 10, barang: "Probiotik B", harga: 10000},
-	// }
-
-	// fmt.Print("Enter: ")
-	// inputHargaBeli, err := bufferReader.ReadString('\n')
-	// if err != nil {
-	// 	fmt.Println(err)
-	// }
-	// hasil := parser(inputHargaBeli)
-
-	//HARDCODEEE
-	point_choices := []point{
+	points := []point{
+		{ID: 1, barang: "Benih Lele", harga: 50000},
 		{ID: 2, barang: "Pakan lele", harga: 25000},
 		{ID: 3, barang: "Probiotik A", harga: 75000},
+		{ID: 4, barang: "Probiotik Nila B", harga: 10000},
+		{ID: 5, barang: "Pakan Nila", harga: 20000},
+		{ID: 6, barang: "Benih Nila", harga: 20000},
+		{ID: 7, barang: "Cupang", harga: 5000},
+		{ID: 8, barang: "Benih Nila", harga: 30000},
+		{ID: 9, barang: "Benih Cupang", harga: 10000},
+		{ID: 10, barang: "Probiotik B", harga: 10000},
 	}
 
-	canBuy, sum := farmerBuy(point_choices, uangTotal)
+	fmt.Print("masukkan ID maksimal 7 barang, tidak boleh ada yang sama: ") // disini sayaa bingung gimana caranya bisa minta banyak input tanpa tau berapa input yang bakal dimasukin user
+	_, err := fmt.Scan(&a, &b, &c, &d, &e, &f, &g)
+	if err != nil {
+		fmt.Println(err)
+	}
+	idInput := []int{a, b, c, d, e, f, g}
+	for i := 0; i < 7; i++ {
+		// tadi abis debug
+		// fmt.Print(points[idInput[i]-1])
+		// fmt.Println(idInput[i])
+		point_choices = append(point_choices, points[idInput[i]-1])
+	}
 
-	if !canBuy {
+	isBought, sum := farmerBuy(point_choices, uangTotal)
+
+	if !isBought {
 		fmt.Println("Petani tidak dapat membeli barang yang telah dipilih")
+		isBerhasil = "tidak berhasil"
+	} else {
+		isBerhasil = "berhasil"
 	}
-	fmt.Printf("Petani berhasil membeli dengan total belanjaan %d", sum)
+	fmt.Printf("Petani %s membeli barang dengan total belanjaan %d", isBerhasil, sum)
 
 }
 
@@ -72,11 +77,21 @@ func main() {
 //      	dan jumlah total modal adalah 100.000
 func farmerBuy(item []point, modal int) (bool, int) {
 	totalBeli := 0
+	var canBuy bool
 	for i := 0; i < len(item); i++ {
 		totalBeli += item[i].harga
-		if totalBeli > modal {
-			return false, totalBeli
-		}
 	}
-	return true, totalBeli
+	if totalBeli > modal {
+		canBuy = false
+	} else {
+		canBuy = true
+	}
+	return canBuy, totalBeli
+}
+
+func urutHargaBarang(p []point) {
+	items := []int{}
+	for i := 0; i < len(p); i++ {
+		items = append(items, p[i].harga)
+	}
 }
