@@ -3,6 +3,7 @@ package main
 import (
 	"aqua5/aqua-go/a"
 	"fmt"
+	"time"
 )
 
 type Z struct {
@@ -21,6 +22,19 @@ func (s *student) helloName() {
 func (s *student) nameChange(namaBaru string) {
 	s.name = namaBaru
 
+}
+
+func numbers() {
+	for i := 1; 1 <= 5; i++ {
+		time.Sleep(250 * time.Millisecond)
+		fmt.Printf("number %d\n", i)
+	}
+}
+func alphabets() {
+	for i := 'a'; 1 <= 'e'; i++ {
+		time.Sleep(400 * time.Millisecond)
+		fmt.Printf("alphabet %c\n", i)
+	}
 }
 
 func main() {
@@ -63,4 +77,9 @@ func main() {
 	// import test.go
 	a.Hello()
 
+	// Go Routines
+	go numbers()
+	go alphabets()
+	time.Sleep(3000 * time.Millisecond)
+	fmt.Printf("Terminating")
 }
