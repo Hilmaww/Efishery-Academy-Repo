@@ -1,4 +1,14 @@
 * Pointer
     - Adalah variabel untuk menyimpan memori dari variabel lain. 
 
-    
+
+*
+*
+*
+*
+
+
+Go Routines
+CHannel
+WaitGroup
+Caching

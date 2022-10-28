@@ -3,6 +3,7 @@ package main
 import (
 	"aqua5/aqua-go/a"
 	"fmt"
+	"sync"
 	"time"
 )
 
@@ -78,8 +79,24 @@ func main() {
 	a.Hello()
 
 	// Go Routines
-	go numbers()
-	go alphabets()
-	time.Sleep(3000 * time.Millisecond)
-	fmt.Printf("Terminating")
+	wg := sync.WaitGroup{}
+	wg.Add(2)
+	// go numbers()
+	// go alphabets()
+	// time.Sleep(3000 * time.Millisecond)
+	go func() {
+		fmt.Println("dari a")
+		wg.Done()
+	}()
+
+	go func() {
+		fmt.Println("dari b")
+		wg.Done()
+	}()
+	go func() {
+		fmt.Println("dari c")
+		wg.Done()
+	}()
+	wg.Wait()
+
 }
