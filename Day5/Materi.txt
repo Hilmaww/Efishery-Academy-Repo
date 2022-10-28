@@ -1,0 +1,4 @@
+* Pointer
+    - Adalah variabel untuk menyimpan memori dari variabel lain. 
+
+    
