@@ -10,6 +10,11 @@ type point struct {
 	harga  int
 }
 
+// Desc: membuat sebuah fungsi yang meminta masukan ID dari point pelanggan, lalu menampilkan nilai berikut:
+// 			- apakah pelanggan dapat membeli barang?
+// 			- list barang yang dibeli
+// 			- produk dengan harga termurah dan termahal
+
 func main() {
 
 	uangTotal := 100000
@@ -36,10 +41,15 @@ func main() {
 		fmt.Println(err)
 	}
 	idInput := []int{a, b, c, d, e, f, g}
+
+	isDuplicate := duplicated(idInput)
+
+	// pengecek duplikasi idInput
+	for !isDuplicate {
+
+	}
+
 	for i := 0; i < 7; i++ {
-		// tadi abis debug
-		// fmt.Print(points[idInput[i]-1])
-		// fmt.Println(idInput[i])
 		point_choices = append(point_choices, points[idInput[i]-1])
 	}
 
@@ -60,14 +70,14 @@ func main() {
 		fmt.Printf("%s - %d\n", point_choices[i].barang, point_choices[i].harga)
 	}
 	fmt.Println("---------------------------------------------------------------------")
-	idHargaTerkecil, idHargaTerbesar := urutHargaBarang(point_choices)
-	fmt.Printf("Produk termurah: %s Rp%d\n", point_choices[idHargaTerkecil].barang, point_choices[idHargaTerkecil].harga)
-	fmt.Printf("Produk termahal: %s Rp%d\n", point_choices[idHargaTerbesar].barang, point_choices[idHargaTerbesar].harga)
+	pointHargaTerkecil, pointHargaTerbesar := urutHargaBarang(point_choices)
+	fmt.Printf("Produk termurah: %s Rp%d\n", pointHargaTerkecil.barang, pointHargaTerkecil.harga)
+	fmt.Printf("Produk termahal: %s Rp%d\n", pointHargaTerbesar.barang, pointHargaTerbesar.harga)
 	fmt.Println("---------------------------------------------------------------------")
 	fmt.Println("Daftar produk dengan harga Rp 10.000: ")
 	item10k := harga10k(point_choices)
 	for i := 0; i < len(item10k); i++ {
-		fmt.Printf("%s - %d\n", point_choices[i].barang, point_choices[i].harga)
+		fmt.Printf("%s - %d\n", item10k[i].barang, item10k[i].harga)
 	}
 }
 
@@ -107,24 +117,21 @@ func farmerBuy(item []point, modal int) (bool, int) {
 
 // desc: membuat fungsi untuk menentukan harga paling murah pada barang barang di point efishery, tanpa sort built-in function
 // input: struct point
-// output: ID (int) dengan harga terkecil dan harga terendah
-func urutHargaBarang(p []point) (int, int) {
+// output: point dengan harga terendah dan harga tertinggi
+func urutHargaBarang(p []point) (point, point) {
 	// inisialisasi items
 	items := p
 	for i := 0; i < len(items); i++ {
-		fmt.Print("i: ", i)
 		if i != 6 {
 			for j := i + 1; j < len(items); j++ {
-				fmt.Println("j: ", j)
 				if items[i].harga > items[j].harga {
 					items[i], items[j] = items[j], items[i]
 				}
-
 			}
 		}
-
 	}
-	return items[0].ID, items[len(items)].ID
+
+	return items[0], items[len(items)-1]
 
 }
 
@@ -132,7 +139,7 @@ func urutHargaBarang(p []point) (int, int) {
 // input: struct point
 // output: slices of struct point dengan harga 10.000
 func harga10k(p []point) []point {
-	var item10k []point
+	item10k := []point{}
 
 	for i := 0; i < len(p); i++ {
 		if p[i].harga == 10000 {
@@ -140,4 +147,19 @@ func harga10k(p []point) []point {
 		}
 	}
 	return item10k
+}
+
+// desc: mengecek duplikasi input dari slice array yang diberikan
+func duplicated(id []int) bool {
+	// pengecek duplikasi idInput
+	for i := 0; i < 7; i++ {
+		for j := i + 1; j < 7; j++ {
+			if id[i] == id[j] {
+				fmt.Println("TIDAK BOLEH ADA BARANG YANG SAMA")
+				return true
+			}
+		}
+	}
+
+	return false
 }
