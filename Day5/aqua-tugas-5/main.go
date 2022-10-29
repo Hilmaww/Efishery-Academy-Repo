@@ -35,18 +35,13 @@ func main() {
 		{ID: 10, barang: "Probiotik B", harga: 10000},
 	}
 
-	fmt.Print("masukkan ID maksimal 7 barang, tidak boleh ada yang sama: ") // disini sayaa bingung gimana caranya bisa minta banyak input tanpa tau berapa input yang bakal dimasukin user
-	_, err := fmt.Scan(&a, &b, &c, &d, &e, &f, &g)
-	if err != nil {
-		fmt.Println(err)
-	}
-	idInput := []int{a, b, c, d, e, f, g}
-
+	idInput := requestInput(a, b, c, d, e, f, g)
 	isDuplicate := duplicated(idInput)
 
 	// pengecek duplikasi idInput
-	for !isDuplicate {
-
+	for isDuplicate {
+		idInput = requestInput(a, b, c, d, e, f, g)
+		isDuplicate = duplicated(idInput)
 	}
 
 	for i := 0; i < 7; i++ {
@@ -162,4 +157,16 @@ func duplicated(id []int) bool {
 	}
 
 	return false
+}
+
+// desc: meminta input dari user
+func requestInput(a int, b int, c int, d int, e int, f int, g int) []int {
+	fmt.Print("masukkan ID maksimal 7 barang, tidak boleh ada yang sama: ") // disini sayaa bingung gimana caranya bisa minta banyak input tanpa tau berapa input yang bakal dimasukin user
+	_, err := fmt.Scan(&a, &b, &c, &d, &e, &f, &g)
+	if err != nil {
+		fmt.Println(err)
+	}
+	idInput := []int{a, b, c, d, e, f, g}
+	return idInput
+
 }
