@@ -35,6 +35,11 @@ func main() {
 		{ID: 10, barang: "Probiotik B", harga: 10000},
 	}
 
+	fmt.Println("ID Nama Harga")
+	for i := 0; i < len(points); i++ {
+		fmt.Println(points[i])
+	}
+
 	idInput := requestInput(a, b, c, d, e, f, g)
 	isDuplicate := duplicated(idInput)
 
