@@ -1,7 +1,6 @@
 package main
 
 import (
-	"encoding/json"
 	"fmt"
 	"io"
 	"net/http"
@@ -18,11 +17,17 @@ type Job struct {
 	Department string `json:"department"`
 }
 type Aggr struct {
-	Desc Desc
-	Jobs []Job
+	Desc string
+	Jobs string
 }
 
-func fetch(url string, d interface{}) error {
+type Cache struct {
+	DescString string
+	JobList    string
+	isFilled   bool
+}
+
+func fetch(url string) string {
 	data, err := http.Get(url)
 	if err != nil {
 		panic(err)
@@ -33,59 +38,63 @@ func fetch(url string, d interface{}) error {
 		panic(err)
 	}
 
-	if err = json.Unmarshal(body, d); err != nil {
-		return err
-	}
-	return err
+	// tadi mainan unmarshal, skarang kembalikan bodynya saja
+	return string(body)
 }
 
 // Mencoba menghitung waktu
-func caculateTime(start time.Time) {
+func calculateTime(start time.Time) {
 	fmt.Println("dari calculate ", start)
 	fmt.Printf("took %v\n", time.Since(start))
 }
 
 // mencoba agregasi
-func Aggregat() (Aggr, error) {
-	defer caculateTime(time.Now())
+func (c *Cache) Aggregat() Aggr {
+	defer calculateTime(time.Now())
+
 	var wg sync.WaitGroup
 	wg.Add(2)
 
-	var desc Desc
-	var descErr error
-	var jobs []Job
-	var jobsErr error
+	var aggr Aggr
 
-	go func() {
-		descErr = fetch("https://workspace-rho.vercel.app/api/description", &desc)
-		wg.Done()
-	}()
-	if descErr != nil {
-		return Aggr{}, descErr
+	if c.isFilled { // kalo dia udah terisi, maka:
+		aggr = Aggr{
+			Desc: c.DescString,
+			Jobs: c.JobList,
+		}
+		c.isFilled = false
+	} else {
+		go func() {
+			c.DescString = fetch("https://workspace-rho.vercel.app/api/description")
+			wg.Done()
+		}()
+		go func() {
+			c.JobList = fetch("https://workspace-rho.vercel.app/api/jobs")
+			wg.Done()
+		}()
+
+		wg.Wait()
+		aggr = Aggr{
+			Desc: c.DescString,
+			Jobs: c.JobList,
+		}
+		c.isFilled = true
 	}
-	go func() {
-		jobsErr = fetch("https://workspace-rho.vercel.app/api/description", &desc)
-		wg.Done()
-	}()
-
-	wg.Wait()
-
-	if jobsErr != nil {
-		return Aggr{}, jobsErr
-	}
-
-	aggr := Aggr{
-		Desc: desc,
-		Jobs: jobs,
-	}
-	return aggr, nil
+	return aggr
 }
 
 func main() {
+	chc := Cache{}
+	data1 := chc.Aggregat()
+	data2 := chc.Aggregat()
+	data3 := chc.Aggregat()
+	data4 := chc.Aggregat()
 
-	aggr, err := Aggregat()
-	if err != nil {
-		panic(err)
-	}
-	fmt.Printf("%+v\n", aggr)
+	fmt.Printf("data 1: %+v\n", data1)
+	fmt.Println()
+	fmt.Printf("data 2: %+v\n", data2)
+	fmt.Println()
+	fmt.Printf("data 3: %+v\n", data3)
+	fmt.Println()
+	fmt.Printf("data 4: %+v\n", data4)
 }
