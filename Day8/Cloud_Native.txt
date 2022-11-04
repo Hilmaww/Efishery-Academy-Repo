@@ -1,0 +1,21 @@
+Pillar of cloud Native
+
+Cloud Native apps:
+- Modern Design
+- MicroServices
+- Containers
+- Backing Services 
+- Automation
+
+menggunakan penyewaan komputer perusahaan dan menggunakan protokol yang tersedia
+
+
+
+docker run hello-world // jalanin docker
+docker pull // narik dari docker hub
+docker ps atau docker container ls // menunjukkan list 
+docker port [nama image]
+docker run -p 8888:80 [nama image]
+            [exposed:internal]
+docker stop [nama image] // ngeberhentiin
+

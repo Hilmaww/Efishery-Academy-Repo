@@ -1,0 +1,44 @@
+job "fawwaz-echo" {
+  datacenters = ["dc1"]
+  type = "service"
+
+  group "web" {
+    count = 1
+
+    network {
+      port "http" {
+        to = 1323
+      }
+    }
+
+    task "fawwaz-echo" {
+      driver = "docker"
+
+      config {
+        image = "hilmaww/go-echo-demo"
+        ports = ["http"]
+      }
+
+      resources {
+        cpu    = 100
+        memory = 128
+      }
+    }
+
+    service {
+      name = "fawwaz-echo"
+      port = "http"
+      tags = [
+        "traefik.enable=true",
+        "traefik.http.routers.fawwaz-echo-demo.rule=Host(\"fawwazecho.cupang.efishery.ai\")",
+      ]
+      check {
+        port        = "http"
+        type        = "tcp"
+        interval    = "15s"
+        timeout     = "14s"
+      }
+    }
+
+  }
+}
